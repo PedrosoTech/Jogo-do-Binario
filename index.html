@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo de Palavras em Binário</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Adivinhe a Palavra em Binário</h1>
+        
+        <div class="difficulty-selector">
+            <label for="difficulty">Dificuldade:</label>
+            <select id="difficulty">
+                <option value="facil">Fácil (30s)</option>
+                <option value="medio">Médio (20s)</option>
+                <option value="dificil">Difícil (10s)</option>
+            </select>
+        </div>
+
+        <div class="stats">
+            <div>Pontos: <span id="score">0</span></div>
+            <div>Recorde: <span id="highScore">0</span></div>
+            <div class="timer">Tempo: <span id="timer">30</span>s</div>
+        </div>
+
+        <div class="binary-word" id="binaryWord"></div>
+        
+        <div class="input-area">
+            <input type="text" id="userGuess" placeholder="Digite a palavra" autocomplete="off">
+            <button onclick="game.checkGuess()">Verificar</button>
+        </div>
+        
+        <div id="message" class="message"></div>
+    </div>
+
+    <script src="js/words.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        const game = new BinaryWordGame();
+    </script>
+</body>
+</html> 

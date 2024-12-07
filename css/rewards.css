@@ -1,0 +1,243 @@
+/* Painel de Recompensas */
+.rewards-panel {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%) translateX(-100%);
+    background: var(--cardBg);
+    border-radius: 15px;
+    box-shadow: 0 0 20px var(--shadow);
+    width: 320px;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.rewards-panel.expanded {
+    transform: translateY(-50%) translateX(0);
+}
+
+.rewards-header {
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-rewards {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-rewards:hover {
+    transform: rotate(15deg);
+}
+
+.rewards-content {
+    padding: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Item de Recompensa */
+.reward-item {
+    background: var(--background);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reward-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--shadow);
+}
+
+.reward-item.unlocked {
+    border: 2px solid var(--primary);
+    animation: glowBorder 2s infinite;
+}
+
+.reward-icon {
+    font-size: 28px;
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 50%;
+    color: white;
+    position: relative;
+}
+
+.reward-icon::after {
+    content: attr(data-tier);
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    font-size: 16px;
+}
+
+.reward-info {
+    flex: 1;
+}
+
+.reward-info h4 {
+    margin: 0;
+    color: var(--text);
+    font-size: calc(var(--font-size-base) * 1.1);
+}
+
+.reward-info p {
+    margin: 5px 0;
+    color: var(--text);
+    opacity: 0.8;
+    font-size: calc(var(--font-size-base) * 0.9);
+}
+
+/* Barra de Progresso */
+.reward-progress {
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--background);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px var(--shadow);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 25%,
+        rgba(255,255,255,0.2) 25%,
+        rgba(255,255,255,0.2) 50%,
+        transparent 50%,
+        transparent 75%,
+        rgba(255,255,255,0.2) 75%
+    );
+    background-size: 10px 10px;
+    animation: progressStripes 1s linear infinite;
+}
+
+.progress-text {
+    font-size: calc(var(--font-size-base) * 0.8);
+    color: var(--text);
+    opacity: 0.8;
+    margin-top: 5px;
+    display: block;
+    text-align: right;
+}
+
+/* Notificação de Recompensa */
+.reward-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: var(--cardBg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px var(--shadow);
+    text-align: center;
+    transition: transform 0.3s ease;
+    z-index: 2000;
+}
+
+.reward-notification.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.reward-unlock-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.reward-icons {
+    font-size: 40px;
+    display: flex;
+    gap: 10px;
+    animation: bounceIn 0.5s ease;
+}
+
+/* Animações */
+@keyframes glowBorder {
+    0% { box-shadow: 0 0 5px var(--primary); }
+    50% { box-shadow: 0 0 20px var(--primary); }
+    100% { box-shadow: 0 0 5px var(--primary); }
+}
+
+@keyframes progressStripes {
+    0% { background-position: 0 0; }
+    100% { background-position: 10px 0; }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Scrollbar personalizada */
+.rewards-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rewards-content::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 4px;
+}
+
+.rewards-content::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .rewards-panel {
+        width: 100%;
+        left: 0;
+        top: auto;
+        bottom: 0;
+        transform: translateY(100%);
+    }
+
+    .rewards-panel.expanded {
+        transform: translateY(0);
+    }
+
+    .reward-notification {
+        width: 90%;
+        max-width: none;
+    }
+} 

@@ -1,149 +1,147 @@
 class BinaryWordGame {
     constructor() {
-        this.score = 0;
-        this.highScore = localStorage.getItem('highScore') || 0;
-        this.currentWord = '';
-        this.timeLeft = 0;
-        this.timer = null;
-        this.difficulty = 'facil';
-        this.isGameOver = false;
-
         this.initializeElements();
-        this.setupEventListeners();
-        this.resetGame();
+        this.setupGame();
     }
 
     initializeElements() {
-        this.elements = {
-            binaryWord: document.getElementById('binaryWord'),
-            userGuess: document.getElementById('userGuess'),
-            message: document.getElementById('message'),
-            score: document.getElementById('score'),
-            highScore: document.getElementById('highScore'),
-            timer: document.getElementById('timer'),
-            difficulty: document.getElementById('difficulty')
-        };
+        // Elementos do DOM
+        this.binaryWordElement = document.getElementById('binaryWord');
+        this.wordInput = document.getElementById('wordInput');
+        this.checkButton = document.getElementById('checkButton');
+        this.hintButton = document.getElementById('hintButton');
+        this.hintElement = document.getElementById('hint');
+        this.pointsElement = document.getElementById('points');
+        this.recordElement = document.getElementById('record');
+        this.timeElement = document.getElementById('time');
+        this.difficultySelect = document.getElementById('difficulty');
     }
 
-    setupEventListeners() {
-        this.elements.userGuess.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.checkGuess();
-        });
+    setupGame() {
+        // Estado inicial do jogo
+        this.currentWord = '';
+        this.points = 0;
+        this.record = parseInt(localStorage.getItem('record')) || 0;
+        this.timeLeft = this.getDifficultyTime();
+        this.timer = null;
+        this.gameActive = true;
 
-        this.elements.difficulty.addEventListener('change', () => {
-            this.difficulty = this.elements.difficulty.value;
-            this.resetGame();
+        // Event Listeners
+        this.checkButton.addEventListener('click', () => this.checkWord());
+        this.hintButton.addEventListener('click', () => this.showHint());
+        this.wordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.checkWord();
         });
+        this.difficultySelect.addEventListener('change', () => this.resetGame());
+
+        // Iniciar jogo
+        this.updateDisplay();
+        this.generateNewWord();
+        this.startTimer();
+    }
+
+    getDifficultyTime() {
+        const times = {
+            'facil': 30,
+            'medio': 20,
+            'dificil': 10
+        };
+        return times[this.difficultySelect.value];
+    }
+
+    wordToBinary(word) {
+        return word.split('').map(char => {
+            return char.charCodeAt(0).toString(2).padStart(8, '0');
+        }).join(' ');
+    }
+
+    generateNewWord() {
+        const difficulty = this.difficultySelect.value;
+        const wordData = GameUtils.getRandomWord(difficulty);
+        this.currentWord = wordData.word.toUpperCase();
+        this.currentHint = wordData.hint;
+        this.binaryWordElement.textContent = this.wordToBinary(this.currentWord);
+        this.hintElement.textContent = ''; // Limpa a dica anterior
+    }
+
+    checkWord() {
+        if (!this.gameActive) return;
+
+        const input = this.wordInput.value.toUpperCase();
+        if (input === this.currentWord) {
+            this.points += 100;
+            if (this.points > this.record) {
+                this.record = this.points;
+                localStorage.setItem('record', this.record);
+            }
+            alert('Correto! +100 pontos');
+        } else {
+            alert('Incorreto! Tente novamente');
+        }
+
+        this.wordInput.value = '';
+        this.updateDisplay();
+        this.generateNewWord();
+        this.resetTimer();
+    }
+
+    showHint() {
+        if (!this.gameActive) return;
+        
+        this.hintElement.textContent = this.currentHint;
+        this.points = Math.max(0, this.points - 20);
+        this.updateDisplay();
+    }
+
+    updateDisplay() {
+        this.pointsElement.textContent = this.points;
+        this.recordElement.textContent = this.record;
+        this.timeElement.textContent = this.timeLeft + 's';
     }
 
     startTimer() {
-        clearInterval(this.timer);
-        this.timeLeft = DIFFICULTY_SETTINGS[this.difficulty].time;
-        this.updateTimerDisplay();
-
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+        
+        this.gameActive = true;
         this.timer = setInterval(() => {
-            this.timeLeft--;
-            this.updateTimerDisplay();
-            
-            if (this.timeLeft <= 0) {
-                this.handleTimeOut();
+            if (this.timeLeft > 0) {
+                this.timeLeft--;
+                this.updateDisplay();
+            } else {
+                this.handleTimeUp();
             }
         }, 1000);
     }
 
-    updateTimerDisplay() {
-        this.elements.timer.textContent = GameUtils.formatTime(this.timeLeft);
-        
-        if (this.timeLeft <= 5) {
-            this.elements.timer.classList.add('warning');
-        } else {
-            this.elements.timer.classList.remove('warning');
-        }
-    }
-
-    generateNewWord() {
-        this.currentWord = GameUtils.getRandomWord(this.difficulty);
-        this.elements.binaryWord.textContent = GameUtils.stringToBinary(this.currentWord);
-        this.elements.userGuess.value = '';
-        this.elements.message.textContent = '';
-        this.elements.message.className = 'message';
-    }
-
-    checkGuess() {
-        if (this.isGameOver) return;
-
-        const guess = this.elements.userGuess.value.toLowerCase().trim();
-        
-        if (guess === this.currentWord) {
-            this.handleCorrectGuess();
-        } else {
-            this.handleIncorrectGuess();
-        }
-    }
-
-    handleCorrectGuess() {
-        const points = DIFFICULTY_SETTINGS[this.difficulty].points * this.timeLeft;
-        this.score += points;
-        this.elements.score.textContent = this.score;
-        
-        this.showMessage('Parabéns! Você acertou!', 'correct');
-        GameUtils.playSound('correct');
-
-        setTimeout(() => {
-            this.generateNewWord();
-            this.startTimer();
-        }, 1500);
-    }
-
-    handleIncorrectGuess() {
-        this.showMessage(`Você errou! A palavra correta era: ${this.currentWord}`, 'incorrect');
-        GameUtils.playSound('wrong');
-
-        setTimeout(() => {
-            this.generateNewWord();
-            this.startTimer();
-        }, 1500);
-    }
-
-    showMessage(text, className) {
-        this.elements.message.textContent = text;
-        this.elements.message.className = `message ${className}`;
-    }
-
-    handleTimeOut() {
+    resetTimer() {
         clearInterval(this.timer);
-        this.showMessage(`Tempo esgotado! A palavra era: ${this.currentWord}`, 'incorrect');
-        GameUtils.playSound('wrong');
-
-        setTimeout(() => {
-            this.generateNewWord();
-            this.startTimer();
-        }, 1500);
+        this.timeLeft = this.getDifficultyTime();
+        this.updateDisplay();
+        this.startTimer();
     }
 
-    gameOver() {
-        this.isGameOver = true;
+    handleTimeUp() {
+        this.gameActive = false;
         clearInterval(this.timer);
-        
-        const isNewHighScore = GameUtils.saveHighScore(this.score);
-        const gameOverMessage = isNewHighScore 
-            ? `Fim de jogo! Novo recorde: ${this.score}!` 
-            : `Fim de jogo! Pontuação: ${this.score}`;
-        
-        this.showMessage(gameOverMessage, 'game-over');
-        
-        setTimeout(() => this.resetGame(), 3000);
+        alert('Tempo esgotado!');
+        this.generateNewWord();
+        this.resetTimer();
     }
 
     resetGame() {
-        this.isGameOver = false;
-        this.score = 0;
-        this.highScore = localStorage.getItem('highScore') || 0;
-        
-        this.elements.score.textContent = '0';
-        this.elements.highScore.textContent = this.highScore;
-        
+        this.gameActive = true;
+        this.points = 0;
+        this.timeLeft = this.getDifficultyTime();
+        clearInterval(this.timer);
+        this.updateDisplay();
         this.generateNewWord();
         this.startTimer();
     }
-} 
+}
+
+// Inicializa o jogo quando a página carregar
+window.addEventListener('DOMContentLoaded', () => {
+    new BinaryWordGame();
+}); 

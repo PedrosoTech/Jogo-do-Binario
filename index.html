@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Palavras em Binário</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Adivinhe a Palavra em Binário</title>
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tutorial.css">
+    <link rel="stylesheet" href="css/progression.css">
+    <link rel="stylesheet" href="css/achievements.css">
+    <link rel="stylesheet" href="css/statistics.css">
+    <link rel="stylesheet" href="css/rewards.css">
 </head>
 <body>
     <div class="container">
@@ -20,27 +26,31 @@
             </select>
         </div>
 
-        <div class="stats">
-            <div>Pontos: <span id="score">0</span></div>
-            <div>Recorde: <span id="highScore">0</span></div>
-            <div class="timer">Tempo: <span id="timer">30</span>s</div>
+        <div class="game-info">
+            <div>Pontos: <span id="points">0</span></div>
+            <div>Recorde: <span id="record">0</span></div>
+            <div>Tempo: <span id="time">30s</span></div>
         </div>
 
-        <div class="binary-word" id="binaryWord"></div>
-        
+        <div id="binaryWord" class="binary-word"></div>
+
+        <button id="hintButton" class="button">Mostrar Dica</button>
+        <div id="hint" class="hint"></div>
+
         <div class="input-area">
-            <input type="text" id="userGuess" placeholder="Digite a palavra" autocomplete="off">
-            <button onclick="game.checkGuess()">Verificar</button>
+            <input type="text" id="wordInput" placeholder="Digite a palavra">
+            <button id="checkButton" class="button">Verificar</button>
         </div>
-        
-        <div id="message" class="message"></div>
     </div>
 
-    <script src="js/words.js"></script>
+    <!-- Scripts em ordem de dependência -->
     <script src="js/utils.js"></script>
+    <script src="js/words.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/hints-generator.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/progression.js"></script>
+    <script src="js/tutorial.js"></script>
     <script src="js/game.js"></script>
-    <script>
-        const game = new BinaryWordGame();
-    </script>
 </body>
 </html> 

@@ -1,0 +1,206 @@
+/* Barra de Progresso de Nível */
+.level-progress {
+    background: var(--cardBg);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: 0 0 15px var(--shadow);
+}
+
+.level-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.current-level {
+    font-size: calc(var(--font-size-base) * 1.2);
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.level-title {
+    color: var(--accent);
+    font-style: italic;
+}
+
+.progress-bar {
+    height: 20px;
+    background: var(--background);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    margin: 10px 0;
+    box-shadow: inset 0 0 5px var(--shadow);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    width: 0%;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        45deg,
+        transparent 25%,
+        rgba(255,255,255,0.1) 25%,
+        rgba(255,255,255,0.1) 50%,
+        transparent 50%,
+        transparent 75%,
+        rgba(255,255,255,0.1) 75%
+    );
+    background-size: 20px 20px;
+    animation: progressStripes 1s linear infinite;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+.exp-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: calc(var(--font-size-base) * 0.9);
+    color: var(--text);
+    margin-top: 5px;
+}
+
+/* Animação de Level Up */
+.level-up-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 2000;
+}
+
+.level-up-animation.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.level-up-content {
+    background: var(--cardBg);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 30px var(--accent);
+}
+
+.level-up-animation.show .level-up-content {
+    transform: scale(1);
+}
+
+.level-up-content h2 {
+    color: var(--primary);
+    font-size: calc(var(--font-size-base) * 2);
+    margin-bottom: 20px;
+}
+
+.level-change {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.old-level, .new-level {
+    font-size: calc(var(--font-size-base) * 3);
+    font-weight: bold;
+}
+
+.old-level {
+    color: var(--text);
+    opacity: 0.7;
+}
+
+.new-level {
+    color: var(--primary);
+    animation: pulseLevel 1s infinite;
+}
+
+.level-arrow {
+    color: var(--accent);
+    font-size: calc(var(--font-size-base) * 2);
+}
+
+.new-title {
+    color: var(--accent);
+    font-size: calc(var(--font-size-base) * 1.2);
+    margin-top: 10px;
+}
+
+/* Animações */
+@keyframes progressStripes {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 20px 0;
+    }
+}
+
+@keyframes pulseLevel {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .level-progress {
+        margin: 10px;
+    }
+
+    .level-info {
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+
+    .exp-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .level-up-content {
+        margin: 20px;
+        padding: 20px;
+    }
+} 

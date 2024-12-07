@@ -1,0 +1,249 @@
+/* Painel de Estatísticas */
+.stats-panel {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) translateX(100%);
+    background: var(--cardBg);
+    border-radius: 15px;
+    box-shadow: 0 0 20px var(--shadow);
+    width: 350px;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.stats-panel.expanded {
+    transform: translateY(-50%) translateX(0);
+}
+
+.stats-header {
+    padding: 15px;
+    background: var(--primary);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-stats {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-stats:hover {
+    transform: rotate(15deg);
+}
+
+.stats-content {
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Sumário de Estatísticas */
+.stats-summary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    background: var(--background);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px var(--shadow);
+    transition: transform 0.2s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-2px);
+}
+
+.stat-value {
+    display: block;
+    font-size: calc(var(--font-size-base) * 1.5);
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: calc(var(--font-size-base) * 0.9);
+    color: var(--text);
+    opacity: 0.8;
+}
+
+/* Gráfico de Dificuldade */
+.difficulty-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    margin: 20px 0;
+    padding: 10px;
+    background: var(--background);
+    border-radius: 10px;
+}
+
+.chart-bar {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.bar-fill {
+    width: 100%;
+    background: linear-gradient(to top, var(--primary), var(--accent));
+    border-radius: 5px 5px 0 0;
+    transition: height 1s ease;
+}
+
+.bar-label {
+    margin-top: 5px;
+    font-size: calc(var(--font-size-base) * 0.8);
+    color: var(--text);
+}
+
+.bar-value {
+    position: absolute;
+    top: 0;
+    transform: translateY(-20px);
+    font-size: calc(var(--font-size-base) * 0.8);
+    color: var(--primary);
+}
+
+/* Histórico de Palavras */
+.stats-history {
+    margin: 20px 0;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: var(--background);
+    border-radius: 5px;
+    transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+    transform: translateX(5px);
+}
+
+.history-item.correct {
+    border-left: 4px solid var(--primary);
+}
+
+.history-item.wrong {
+    border-left: 4px solid #ff4444;
+}
+
+.history-item .word {
+    font-weight: bold;
+    color: var(--text);
+}
+
+.history-item .time {
+    color: var(--accent);
+}
+
+.history-item .difficulty {
+    font-size: calc(var(--font-size-base) * 0.8);
+    color: var(--text);
+    opacity: 0.8;
+}
+
+/* Progresso Diário */
+.daily-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 150px;
+    margin: 20px 0;
+    padding: 10px;
+    background: var(--background);
+    border-radius: 10px;
+}
+
+.day-bar {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.day-bar .bar-fill {
+    width: 100%;
+    background: linear-gradient(to top, var(--secondary), var(--accent));
+    border-radius: 5px 5px 0 0;
+    transition: height 1s ease;
+}
+
+/* Anima��ões */
+@keyframes barFill {
+    from { height: 0; }
+    to { height: var(--target-height); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Scrollbar personalizada */
+.stats-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.stats-content::-webkit-scrollbar-track {
+    background: var(--background);
+    border-radius: 4px;
+}
+
+.stats-content::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 4px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .stats-panel {
+        width: 100%;
+        right: 0;
+        top: auto;
+        bottom: 0;
+        transform: translateY(100%);
+    }
+
+    .stats-panel.expanded {
+        transform: translateY(0);
+    }
+
+    .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .difficulty-chart, .daily-chart {
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+
+    .chart-bar, .day-bar {
+        min-width: 50px;
+    }
+} 

@@ -1,0 +1,221 @@
+/* Overlay do Tutorial */
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Popup do Tutorial */
+.tutorial-popup {
+    position: fixed;
+    background: var(--cardBg);
+    border-radius: 15px;
+    padding: 0;
+    box-shadow: 0 0 30px var(--shadow);
+    width: 300px;
+    z-index: 9999;
+    animation: popIn 0.3s ease;
+}
+
+.tutorial-header {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white;
+    padding: 15px 20px;
+    border-radius: 15px 15px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tutorial-header h3 {
+    margin: 0;
+    font-size: calc(var(--font-size-base) * 1.2);
+}
+
+.step-counter {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: calc(var(--font-size-base) * 0.8);
+}
+
+.tutorial-content {
+    padding: 20px;
+}
+
+.tutorial-content p {
+    margin: 0 0 20px 0;
+    color: var(--text);
+    line-height: 1.5;
+}
+
+/* Botões do Tutorial */
+.tutorial-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.tutorial-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: calc(var(--font-size-base) * 0.9);
+    transition: all 0.2s ease;
+}
+
+.tutorial-prev {
+    background: var(--background);
+    color: var(--text);
+}
+
+.tutorial-next,
+.tutorial-finish {
+    background: var(--primary);
+    color: white;
+}
+
+.tutorial-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.tutorial-actions button:active {
+    transform: translateY(0);
+}
+
+/* Setas Indicativas */
+.tutorial-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+}
+
+.tutorial-arrow-top {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: var(--primary);
+}
+
+.tutorial-arrow-bottom {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--primary);
+}
+
+.tutorial-arrow-left {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--primary);
+}
+
+.tutorial-arrow-right {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--primary);
+}
+
+/* Botão de Ajuda */
+.help-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px var(--shadow);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.help-button:hover {
+    transform: rotate(15deg) scale(1.1);
+    background: var(--accent);
+}
+
+/* Destaque do Elemento */
+.tutorial-highlight {
+    position: relative;
+    z-index: 10000;
+    animation: pulse 2s infinite;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .tutorial-popup {
+        width: 90%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .help-button {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .tutorial-actions {
+        flex-direction: column;
+    }
+
+    .tutorial-actions button {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .tutorial-popup,
+    .tutorial-overlay,
+    .help-button,
+    .tutorial-highlight {
+        animation: none;
+        transition: none;
+    }
+} 
